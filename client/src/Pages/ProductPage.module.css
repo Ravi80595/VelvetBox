@@ -1,0 +1,42 @@
+.main2:hover{
+    border: 1px solid rgb(16,132,126);
+    cursor: pointer;
+   }
+   .sort_filter{
+       display: none;
+   }
+   
+
+    /* For medium size screen */
+
+   @media only screen and (max-width: 1090px) {
+       .main{
+           width: 100% !important;
+       }
+       .main1{
+           display: none;
+       }
+   
+       .data_box{
+           width: 100% !important;
+       }
+       .sortBy{
+           display: none;
+       }
+       .select{
+           display: none !important;
+       }
+       .sort_filter{
+           display: block;
+       }
+       
+   }
+
+   /* For small size screen */
+
+   @media only screen and (max-width: 500px) {
+   .heading{
+       font-size:25px !important;
+   }
+   
+   }

@@ -1,6 +1,7 @@
 import { Box, Flex,Image,Text } from '@chakra-ui/react'
 import React from 'react'
 import Logo from "../images/Logo.jpg"
+import { Link } from 'react-router-dom'
 
 const Navbar = () => {
 
@@ -13,7 +14,9 @@ return (
       <Flex fontSize='20px' pt={8} w='56%' justifyContent='space-around'>
         <Text>Home</Text>
         <Text>Category</Text>
+        <Link to="/products">
         <Text>Products</Text>
+        </Link>
         <Text>About Us</Text>
         <Text>Why us</Text>
         <Text>More</Text>
