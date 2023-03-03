@@ -34,19 +34,20 @@ const handleSubmit=()=>{
             username:values.username,
             email:values.email,
             password:values.password,
-            location:values.location,
-            occupation:values.occupation
+            address:{"state":'values.address'},
+            mobileNumber:values.mobile,
+            country:values.country
         };
         console.log(payload)
 if(payload.email=="" || payload.password=="" || payload.firstName=="" || payload.lastName==""){
         alert("Please fill All Madentory fields")
   }else{
-axios.post(`${baseUrl}/auth/register`,payload)
+axios.post(`${baseUrl}/register`,payload)
 .then((res)=>{
     console.log("Signup Success",res)
+    localStorage.setItem('velvetId',JSON.stringify(res.data))
     alert("Signup Success")
-    setValues(initObj)
-    navigate("/userlogin")
+    navigate("/user/login")
 })
 .catch((err)=>{
     console.log(err)
@@ -96,9 +97,7 @@ axios.post(`${baseUrl}/auth/register`,payload)
                    <FormLabel>Address</FormLabel>
                         <Input type="text" name='address' onChange={handleChange}/>
                         <FormLabel>Country</FormLabel>
-                        <Input type="text" name='location' onChange={handleChange}/>
-                        {/* <FormLabel>Occupation</FormLabel>
-                        <Input type="text" name='occupation' onChange={handleChange}/> */}
+                        <Input type="text" name='country' onChange={handleChange}/>
                         <Button mt={2} width="100%" onClick={handleSubmit}>Signup</Button>
                         <Text textAlign="center">OR</Text>
                         <Link to="/user/login">

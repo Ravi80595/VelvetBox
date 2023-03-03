@@ -2,16 +2,18 @@ import { Box,Flex,FormControl,Input,Button,FormLabel,Image,Text, Heading, color,
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Navbar from '../../Components/Navbar'
-
+import { baseUrl } from '../../Utils/BaseUrl'
+import axios from 'axios'
 
 
 const Login = () => {
   const navigate=useNavigate()
   const [show,setShow]=useState(false)
   const [values,setValues]=useState({
-    email:"",
+    username:"",
     password:"",
   })
+  const {id,username}=JSON.parse(localStorage.getItem("velvetId"))
 
 
   const handleClick = () => setShow(!show);
@@ -22,17 +24,21 @@ const Login = () => {
 
   const handleLogin=()=>{
     let payload={
-      email:values.email,
+      id:id,
+      username:values.username,
       password:values.password
     }
+    console.log(payload)
     if(payload.email=="" || payload.password==""){
       alert("Please fill All Madentory fields")
-    }else{
-    //   dispatch(login(payload)).then((res)=>{
-      // localStorage.setItem("socialPshcyoToken",JSON.stringify(res.payload))
-    //   setValues({email:"",password:""})
-    //   navigate("/")
-    // })
+    }else{  
+      axios.post(`${baseUrl}/login`,payload)
+      .then((res)=>{
+        console.log(res)
+        localStorage.setItem('velvetToken',JSON.stringify(res.data))
+        alert('Login Success')
+        navigate('/')
+      })
   }
   }
 
@@ -44,8 +50,8 @@ const Login = () => {
         <Box p={10} m={[0,0,10]} boxShadow='rgba(0, 0, 0, 0.35) 0px 5px 15px'>
           <Heading textAlign="center" mb={10} fontFamily="cursive">Velvet Box</Heading>
             <FormControl isRequired>
-                    <FormLabel>Email</FormLabel>
-                    <Input type="email" placeholder='Enter email' name='email' onChange={handleChange}/>
+                    <FormLabel>Username</FormLabel>
+                    <Input type="username" placeholder='Enter username' name='username' onChange={handleChange}/>
                     <FormLabel>Password</FormLabel>
                    <InputGroup size="md">
                         <Input
