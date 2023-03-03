@@ -23,27 +23,27 @@ const BrandsData = [
       heading: "Sugerfree",
     },
     {
-      img: "https://4qozi.csb.app/assets/img/category/categorie3.png",
+      img: "https://www.chjewels.com/assets/img/slider/fine_jewellery/image3.png",
       heading: "LivEasy",
     },
     {
-      img: "https://cms-contents.pharmeasy.in/carousel_item/201210bc27d-App_Huggies.jpg?dim=1440x0",
-      heading: "Huggies",
+      img: "https://m.media-amazon.com/images/I/51kar4MuOGL._UY500_.jpg",
+      heading: 'Rings',
     },
     {
-      img: "https://cms-contents.pharmeasy.in/carousel_item/d6726e69b22-04.jpg?dim=1440x0",
-      heading: "Wellbeing Nutrition",
+      img: "https://www.kalyanjewellers.net/images/Jewellery/Gold/images/kajjara-nimah-gold-jhumka.jpg",
+      heading: "Earings",
     },
     {
-      img: "https://cms-contents.pharmeasy.in/carousel_item/c9fc0cd6ef6-Revital-min.png?dim=1440x0",
-      heading: "Revital",
+      img: "https://www.tbztheoriginal.com/storage/products/July2019/aDeBn5X86UFbcRd8NjIe.jpg",
+      heading: 'Bangles',
     },
     {
-      img: "https://cms-contents.pharmeasy.in/carousel_item/e8a5cabe9f3-Volini-min.png?dim=1440x0",
+      img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlkGQUWCUPGgT83zETB8XshkfFab2eJk_TTg&usqp=CAU",
       heading: "Volini",
     },
     {
-      img: "https://cms-contents.pharmeasy.in/carousel_item/c774461a093-Pentasure_App.jpg?dim=1440x0",
+      img: "https://princejewellery.com/themes/pjewellery/assets/img/header/collection-nav.jpg",
       heading: "Pentasure",
     }
   ];

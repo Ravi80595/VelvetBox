@@ -3,8 +3,10 @@
     margin: auto;
     padding: 40px;
     text-align: left;
-    background-color: #eef4fe;
+    background: rgb(20,18,45);
+background: linear-gradient(90deg, rgba(20,18,45,1) 12%, rgba(60,60,87,1) 31%, rgba(38,57,61,1) 100%);
     margin-top: 100px;
+    color: white;
 }
 @media screen and (max-width:1180px) and (min-width:760px) {
     .container{

@@ -6,17 +6,21 @@ import Carousal from './Carousal'
 import Category from './Category'
 import Hero from './Hero'
 import ProductIcons from './ProductIcons'
+import Reviews from './Reviews'
+import Navbar from "./../../Components/Navbar"
 
 const Home = () => {
 
 
 return (
     <Box>
+      <Navbar/>
       <Hero/>
       <ProductIcons/>
       <AboutUs/>
       <Category/>
       <Carousal/>
+      <Reviews/>
       <Footer/>
     </Box>
   )
