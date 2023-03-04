@@ -73,7 +73,7 @@ return (
           className="mySwiper"
         >
           {ReviewsData.map((el, i) => (
-            <SwiperSlide style={{ gap: "10px", color: "black" }}>
+            <SwiperSlide key={i} style={{ gap: "10px", color: "black" }}>
             <Box key={i} width="344px" textAlign="left">
               <Heading fontSize="16px" fontWeight="600">
                 {el.name}

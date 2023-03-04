@@ -13,7 +13,7 @@ const Login = () => {
     username:"",
     password:"",
   })
-  const {id,username}=JSON.parse(localStorage.getItem("velvetId"))
+  const {id}=JSON.parse(localStorage.getItem("velvetId")) || []
 
 
   const handleClick = () => setShow(!show);
@@ -24,11 +24,9 @@ const Login = () => {
 
   const handleLogin=()=>{
     let payload={
-      id:id,
       username:values.username,
       password:values.password
     }
-    console.log(payload)
     if(payload.email=="" || payload.password==""){
       alert("Please fill All Madentory fields")
     }else{  

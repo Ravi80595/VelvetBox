@@ -56,7 +56,7 @@ return (
             modules={[Navigation]}
             className="mySwiper">
         {BrandsData.map((el, i) => (
-              <SwiperSlide>
+              <SwiperSlide key={i}>
                 <Box key={i} height="600px">
                 <Box textAlign='left' top='30%' left='10%' color='#fff' position='absolute'>
                    <Heading fontSize='50px' mb={3}>Designer Jewellery</Heading>

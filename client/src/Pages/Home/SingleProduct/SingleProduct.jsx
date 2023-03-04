@@ -6,6 +6,7 @@ import { BsStarFill } from "react-icons/bs";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../Components/Navbar";
+import { baseUrl } from "../../../Utils/BaseUrl";
 
 
 const SingleProduct = () => {
@@ -14,90 +15,84 @@ const SingleProduct = () => {
     rating: 3,
   };
 
- const [item,setItem]=useState({})
- const [qty,setQty]=useState()
-  const {_id}=useParams() 
+  const [item,setItem]=useState([])
+  const [qty,setQty]=useState()
+  const {id}=useParams() 
   const navigate=useNavigate()
-  const [data,setData]=useState([])
+  const {jwtToken}=JSON.parse(localStorage.getItem('velvetToken')) || []
+  let cookie=jwtToken.split(";")
+  let cookies=cookie[0].split("=")
+  let r=cookies[1]
 
-
-  const cartproducts = data && data;
-
-//   const dispatch = useDispatch();
-  const GetCartVal = () => {
-    // dispatch(GetCartData());
-  };
 
 const handlePrevPage=()=>{
-  navigate('/productspage')
+  navigate('/products')
 }
+
 //  ............ Get Single Product data............
-  useEffect(() => {
-    axios
-      .get(`http://localhost:8400/product/singleproduct/${_id}`)
-      .then((res) => {
-        setItem(res.data);
-    
-      })
-      .catch((err) => {
-        console.log("err", err);
-      });
-      GetCartVal()
-  }, []);
 
-
-  const {listPrice,salePrice,productImage,productName,category,type,description}=item
-
-
-//  .............Add To Cart method ...............
-
-const addToCart=()=>{
-  const payload={
-    quantity:qty,product_Id:_id,
-  listPrice,salePrice,productImage,productName,
-  category,type,description
-
+useEffect(() => {
+axios.get(`${baseUrl}/searchById?productId=${id}`,{
+  headers:{
+    Authorization:`Bearer ${r}`
   }
+})
+  .then((res) => {
+    console.log(res.data)
+    setItem([res.data]);
+  })
+  .catch((err) => {
+    console.log("err", err);
+  });
+}, []);
 
-console.log(payload)
- const token='4'
-  console.log(payload)
-  axios
-        .post(
-          "http://localhost:8400/cart/addtocart",
-          payload,
-          {
-            headers: {
-              token : token,
-            },
-          }
-          
-        )
-        .then((res)=>{
-        
-          alert("item added to cart")
-          
-        })
-        .catch((err)=>{
-          console.log(err)
-        })
 
-      
-}
+// //  .............Add To Cart method ...............
+
+// const addToCart=()=>{
+//   axios.post(`${baseUrl}/add-cart?productId=${"_TKj5SLoXA97Z_"}&quantity=2`,{
+//     headers: {
+//       Authorization : `Bearer ${r}`
+//     }
+//   })
+// .then((res)=>{
+//   console.log(res)
+//   alert("item added to cart")
+// })
+// .catch((err)=>{
+//   console.log(err)
+// })     
+// }
 
   const viewcart=()=>{
     navigate("/cart")
   }
  
 
+const addCart=(ids)=>{
+  fetch(`${baseUrl}/add-cart?productId=${ids}&quantity=2`,
+  {
+    method:'POST',
+    headers:{
+      Authorization : `Bearer ${r}`
+    }
+  }).then(res=>{
+    return res.json()
+  }).then(res=>{
+    console.log(res)
+    alert("Product added to cart.")
+  })
+}
+
 
   return (
     <>
     <Navbar/>
-      <Box  w="90%"  m="auto" pt='100px' className={Style.containter}>
+    {
+      item && item.map(el=>(      
+      <Box  w="90%" key={el.productId} m="auto" pt='100px' className={Style.containter}>
         <Text className={Style.heading}>
-        {item?.productName} 
-      
+        {el.productName} 
           </Text>
         <Box mt="30px" display='flex' className={Style.main_box}>
           <Box  w="70%" className={Style.main_box1}>
@@ -108,7 +103,7 @@ console.log(payload)
                 borderRadius='8px'
                 p="10px"
                   h="100%"
-                  src={item?.productImage}
+                  src={el.imageUrl[0]}
                   alt="Dan Abramov"
                 />
               </Box>
@@ -120,7 +115,7 @@ console.log(payload)
                   mt="6px"
                   color="rgb(79,88,104)"
                 >
-                       {item?.productName} 
+                       {el.productName} 
                 </Heading>
                 <Text mt="10px" mb="10px" color="teal" cursor='pointer' onClick={handlePrevPage}>
                   Visit {item?.type} store{" "}
@@ -148,13 +143,13 @@ console.log(payload)
 
                     <Flex mt="10px">
                       <Heading size="sm" fontWeight="bold" fontSize="20px">
-                        ₹{item?.salePrice}
+                      ₹{el.sale_price}
                       </Heading>
                       <Text color="gray.500" ml="10px">
-                        MRP{" "}
-                        <span style={{ textDecoration: "line-through" }}>
-                          ₹{item?.listPrice}
-                        </span>
+                        MRP{el.sale_price}
+                        {/* <span style={{ textDecoration: "line-through" }}>
+                          ₹{el.sale_price}
+                        </span> */}
                       </Text>
                       <Text
                         ml="10px"
@@ -163,13 +158,13 @@ console.log(payload)
                         pr="5px"
                         color="white"
                       >
-                        {item?.discountPercent}
+                        {'10%'}
                       </Text>
                     </Flex>
                     <Text fontSize="13px" color="gray.500">
                       Inclusive of all taxes
                     </Text>
-                    <Text fontSize="15px"> Delivery by 17 Dec - 18 Dec</Text>
+                    <Text fontSize="15px"> Delivery by 17 Mar - 18 Mar</Text>
                   </Box>
                   <Spacer />
                   <Box display="flex" className={Style.buttons}>
@@ -186,22 +181,15 @@ console.log(payload)
                     <option value="3"> 3</option>
                     <option value="4"> 4</option>
                   </Select>
-                  
-          
-                    <Button colorScheme='teal'mt='15px'  fontSize='20px' onClick={()=>addToCart(_id,listPrice,salePrice,productImage,productName)} className={Style.addCartBtn1}>Add To Cart</Button>
-                  
+                    <Button colorScheme='teal'mt='15px'  fontSize='20px' onClick={()=>addCart(el.productId)} className={Style.addCartBtn1}>Add To Cart</Button>
                   </Box>
                  
                   </Box>
-                  <Button colorScheme='teal'  fontSize='20px' onClick={()=>addToCart(_id,listPrice,salePrice,productImage,productName)} className={Style.addCartBtn2}>Add To Cart</Button>
+                  {/* <Button colorScheme='teal'  fontSize='20px' onClick={()=>addCart(el.productId)} className={Style.addCartBtn2}>Add To Cart</Button> */}
                 </Box>
               </Box>
             </Box>
-
-
-            {/* Description in bottom section   */} 
             <Divider mt='50px'/>
-
             <Box  p="20px" mt='50px'>
               <Heading
                 size="sm"
@@ -258,7 +246,7 @@ console.log(payload)
               mt="6px"
               color="rgb(79,88,104)"
             >
-           {cartproducts && cartproducts.length} Items in Cart
+           See Items in Cart
             </Heading>
             <Button onClick={viewcart} colorScheme="teal" w="100%" fontSize="20px" mt="20px" >
               View Cart{" "}
@@ -266,6 +254,7 @@ console.log(payload)
           </Box>
         </Box>
       </Box>
+      ))}
     </>
   );
 };

@@ -8,26 +8,35 @@ const UsersPage = () => {
     const [loading,setLoading]=useState(false)
     const [users,setUsers]=useState([])
     const navigate=useNavigate()
+    const {email,jwtToken}=JSON.parse(localStorage.getItem('AdminToken')) || []
+    let cookie=jwtToken.split(";")
+    let cookies=cookie[0].split("=")
+    let r=cookies[1]
 
 
-
-// useEffect(()=>{
-//     setLoading(true)
-// axios.get(`${baseUrl}/user/allUser`)
-//     .then((res)=>{
-//         // console.log(res.data)
-//         setUsers(res.data)
-//         setLoading(false)   
-//     })
-//     .catch((err)=>{
-//         console.log(err)
-//     })
-//     },[])
+useEffect(()=>{
+    // setLoading(true)
+axios.get(`${baseUrl}/allUsers`,{
+  headers:{
+    Authorization:`Bearer ${r}`
+  }
+})
+.then((res)=>{
+        console.log(res.data)
+        setUsers(res.data)
+        setLoading(false)   
+    })
+    .catch((err)=>{
+        console.log(err)
+        console.log(err.response.data)
+        setUsers(err.response.data)
+    })
+    },[])
 
 const handleChange = (e) => {
     axios.get(`${baseUrl}/user/search/${e.target.value}`)
 .then((res)=>{
-    // console.log(res)
+    console.log(res)
     setUsers(res.data)
     })
     .catch((err)=>{
@@ -58,18 +67,20 @@ return (
                 <Tr textAlign='center'>
                   <Th>Image</Th>
                   <Th>User-name</Th>
-                  <Th>Joining-Date</Th>
-                  <Th>Joining-Time</Th>
+                  <Th>Full Name</Th>
+                  <Th>Email</Th>
+                  <Th>Mobile</Th>
                 </Tr>
               </Thead>
               <Tbody>
       {
         users && users.map(ele=>(
-                <Tr onClick={()=>handleNavigate(ele)} cursor="pointer" _hover={{backgroundColor:"#f3f4f6"}}>
+                <Tr key={ele.userId} cursor="pointer" _hover={{backgroundColor:"#f3f4f6"}}>
                   <Td><Image w={50} src={`https://www.freeiconspng.com/uploads/blank-face-person-icon-7.png`}/></Td>
-                  <Td>{ele.fullName}</Td>
-                  <Td>{ele.date} {ele.lastName}</Td>
-                  <Td>{ele.time}</Td>
+                  <Td>{ele.username}</Td>
+                  <Td>{ele.firstName} {ele.lastName}</Td>
+                  <Td>{ele.email}</Td>
+                  <Td>{ele.mobileNumber}</Td>
                 </Tr>
                 ))
               }

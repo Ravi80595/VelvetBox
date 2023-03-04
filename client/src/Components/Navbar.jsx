@@ -7,6 +7,11 @@ import {BiUserCircle} from 'react-icons/bi'
 
 const Navbar = () => {
 
+const {id,username}=JSON.parse(localStorage.getItem("velvetToken")) || []
+
+const handleLogout=()=>{
+  localStorage.setItem("velvetToken",null)
+}
 
 return (
     <Flex justifyContent='space-between' boxShadow='rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px' position='fixed' w='100%' zIndex={9999} bg='white'>
@@ -30,7 +35,9 @@ return (
         </Link>
           <Flex gap={10}>
             <Link to="/user/login">
-          <BiUserCircle fontSize='30px'/>
+          {
+            username!=null? <Text onClick={handleLogout}>Logout</Text>:<BiUserCircle fontSize='30px'/>
+          }
             </Link>
             <Link to="/cart">
           <BsCart2 fontSize='30px'/>

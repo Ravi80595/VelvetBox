@@ -1,49 +1,75 @@
 import React,{useEffect, useState} from "react";
-// import {useSelector,useDispatch} from 'react-redux'
-// import {GetHealthyFoodDrinksCategory,GetBabyHelthCategory, GetFacecareCategory, GetProducts } from "../Redux/Product/Product.action";
 import {Box,Text,SimpleGrid,Image,Heading,Flex,Select,Spacer,Radio, Divider,Checkbox,Drawer,DrawerFooter,DrawerHeader,DrawerOverlay,DrawerContent,DrawerCloseButton,Button,useDisclosure, RadioGroup, Stack, DrawerBody} from "@chakra-ui/react";
 import Style from "./ProductPage.module.css";
 import {useNavigate} from 'react-router-dom'
 import Navbar from "../Components/Navbar"
-// import { FETCH_PRODUCT_SUCCESS } from "../Redux/Product/Product.types";
+import axios from "axios";
+import {baseUrl} from '../Utils/BaseUrl'
 
 const ProductsPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const btnRef = React.useRef()
   const [value, setValue] = React.useState('1')
   const [data,setData]=useState([])
-
- 
-  // const data = useSelector((state) => state.product.data);
-  // const dispatch = useDispatch();
   const navigate =useNavigate() 
-  
+
+ const {jwtToken}=JSON.parse(localStorage.getItem('velvetToken')) || []
+ let cookie=jwtToken.split(";")
+ let cookies=cookie[0].split("=")
+let r=cookies[1]
+
+
   useEffect(() => {
-    // dispatch(GetProducts());
+    gold()
   }, []);
   
   // ..........Single Product Route............
  
   const handleClick=(el)=>{
-     navigate(`/singleProduct`)
+     navigate(`/singleProduct/${el.productId}`)
   }
 
-  // ............. Face care category function............
+  // ............. Daimond function............
 
-  const handleFaceCareCat=(e)=>{
-  //  dispatch(GetFacecareCategory())
+const daimonds=(e)=>{
+    axios.get(`${baseUrl}/search/category?categoryName=daimond`,{
+      headers:{
+        Authorization:`Bearer ${cookies}`
+      }
+    })
+    .then((res)=>{
+      console.log(res)
+      setData(res.data)
+    })
 }
 
-// .........Baby Health Care catogory function..................
-  const handleBabyCat=(e)=>{
-  //  dispatch(GetBabyHelthCategory())
+// .........Rings catogory function..................
+
+const gold=(e)=>{
+  axios.get(`${baseUrl}/search/category?categoryName=gold`,{
+    headers:{
+      Authorization:`Bearer ${r}`
+    }
+  })
+  .then((res)=>{
+    console.log(res)
+    setData(res.data)
+  })
 }
 
 
-// ...........Healthy Food And Drinks Category function...........
+// ...........Neckless Category function...........
 
-const handleHealthyAndFoodCat=(e)=>{
-//  dispatch(GetHealthyFoodDrinksCategory())
+const Neckless=(e)=>{
+  axios.get(`${baseUrl}/search/category?categoryName=general`,{
+    headers:{
+      Authorization:`Bearer ${cookies}`
+    }
+  })
+  .then((res)=>{
+    console.log(res)
+    setData(res.data)
+  })
 }
   
 
@@ -53,6 +79,8 @@ const handleSortData = (value) => {
 
 }
  
+
+
   return (
     <>
     <Navbar/>
@@ -63,30 +91,20 @@ const handleSortData = (value) => {
       <Heading size="sm" fontSize="30px" color='rgb(79,88,104)'>Filter</Heading>
               <Text mt='20px' mb='15px' fontSize='20px'>Category</Text>
               <RadioGroup onChange={setValue} value={value}>
-              <Flex onClick={handleBabyCat} mb='10px'>
-              <Text>Neckles</Text>
+              <Flex onClick={Neckless} mb='10px'>
+              <Text>General</Text>
                <Spacer />
               <Radio  value='1'></Radio>
               </Flex>
-              <Flex onClick={handleHealthyAndFoodCat} mb='10px'>
-              <Text>Rings</Text>
+              <Flex onClick={daimonds} mb='10px'>
+              <Text>Daimond</Text>
                <Spacer />
               <Radio  value='2'></Radio>
               </Flex>
-              <Flex onClick={handleFaceCareCat} mb='10px'>
-              <Text>Daimonds</Text>
+              <Flex onClick={gold} mb='10px'>
+              <Text>Gold items</Text>
                <Spacer />
               <Radio  value='3'></Radio>
-              </Flex>
-              <Flex onClick={handleFaceCareCat} mb='10px'>
-              <Text>Tiara</Text>
-               <Spacer />
-              <Radio  value='4'></Radio>
-              </Flex>
-              <Flex onClick={handleFaceCareCat}>
-              <Text>Bangles</Text>
-               <Spacer />
-              <Radio  value='5'></Radio>
               </Flex>
               </RadioGroup>
               <Divider mt='30px' />
@@ -152,9 +170,9 @@ const handleSortData = (value) => {
           </Flex>
         </Box>
         <Box  m='auto' className={Style.sort_filter}>
-    <Button w='50%' ref={btnRef}  borderColor="gray.600" onClick={onOpen}>
+    {/* <Button w='50%' ref={btnRef}  borderColor="gray.600" onClick={onOpen}>
         Sort 
-      </Button>
+      </Button> */}
       <Drawer
         isOpen={isOpen}
         placement='bottom'
@@ -207,27 +225,27 @@ const handleSortData = (value) => {
     </Box>
   
         <SimpleGrid columns={[1, 2, 3]} spacing="10px">
-        {/* {
-           data.map((el)=>( */}
-        
+        {
+           data.map((el)=>(
           <Box
             border="1px"
             borderColor="gray.300"
             padding="8px"
             borderRadius="6px"
             mt="10px"
+            key={el.productId}
             className={Style.main2}
-            onClick={()=>handleClick()}
+            onClick={()=>handleClick(el)}
           >
             <Image
               m="auto"
               mt="5px"
               height="200px"
-              src={'https://m.media-amazon.com/images/I/51kar4MuOGL._UY500_.jpg'}
+              src={el.imageUrl[0]}
               alt="Vicks"
             />
             <Heading size="sm" fontSize="17px" fontWeight="bold" mt="6px" color='rgb(79,88,104)'>
-              {'CaratLane Yellow Gold Ring for men'}
+              {el.productName}
             </Heading>
             <Flex mt="10px">
               <Text color='gray.500' textDecoration="line-through">MRP ₹{'1599'}</Text>
@@ -241,10 +259,10 @@ const handleSortData = (value) => {
                 {'20%'}
               </Text>
             </Flex>
-
-            <Heading size="sm">₹{'1699'}</Heading>
+            <Heading size="sm">₹{el.sale_price}</Heading>
+            {/* <Button onClick={()=>addCart(el.productId)}>Add To Cart</Button> */}
           </Box>
-               {/* ) )}  */}
+               ) )} 
         </SimpleGrid>
       </Box>
     </Box>

@@ -1,45 +1,72 @@
-import {Box,Divider,Flex,HStack,Image,Select,Stack,VStack,} from "@chakra-ui/react";
+import {Box,Divider,Select,Stack,VStack,Text, Image} from "@chakra-ui/react";
+import axios from "axios";
 import React, {useEffect, useState} from "react";
 import {RiDeleteBin6Line} from "react-icons/ri";
 import {useNavigate} from "react-router-dom";
 import Navbar from "../../../Components/Navbar";
-// import {editCart,GetCartData,RemovecartProduct} from ""
+import { baseUrl } from "../../../Utils/BaseUrl";
 import styles from "./cartpage.module.css"
 
 
 
 const Cartpage = () => {
     const [cartproducts,setCartProducts]=useState([])
-    const grandtotal = '10';
     const navigate = useNavigate();
-  
-const GetCartVal = () => {
-};
-  
-  
-const RemoveProduct = (product_Id) => {
-};
-  
+    const {jwtToken}=JSON.parse(localStorage.getItem('velvetToken')) || []
+    let cookie=jwtToken.split(";")
+    let cookies=cookie[0].split("=")
+    const [data,setData]=useState([])
+    const [amount,setAmount]=useState([])
+// console.log(cartproducts)
+
+
 useEffect(() => {
-    GetCartVal();
+  const GetCartVal = () => {
+    axios.get(`${baseUrl}/cart`,{
+      headers:{
+      Authorization:`Bearer ${cookies[1]}`
+    }
+  })
+  .then((res)=>{
+    // console.log(res.data)
+    setAmount(res.data)
+    setData(res.data.cartProducts)
+  })}
+  GetCartVal()
 }, []);
+
+useEffect(() => {
+  const fetchItemData = async () => {
+    const itemData = await Promise.all(data.map(async el => {
+      const result = await axios.get(`http://localhost:8765/searchById?productId=${el.productDtoId}`);
+      return result.data;
+    }));
+    setCartProducts(itemData);
+  };
+  if (data.length > 0) {
+    fetchItemData();
+  }
+}, [data]);
+
+const RemoveProduct = (product_Id) =>{
+  axios.delete(`${baseUrl}/delete-cart?productId=${product_Id}`,{
+    headers:{
+      Authorization:`Bearer ${cookies[1]}`
+    }
+  })
+  .then((res)=>{
+    // console.log(res.data)
+    window.location.reload(true)
+  })
+};
+  
+
   
 const proceedtopayment = () => {
     alert('Order Placed')
 };
   
-const selectqty = (e, id) => {
-    const quantity = e.target.value;
-    const product_Id = id;
-    window.location.reload()
-};
-  
-const convertdecimal = (p1, p2) => {
-    const ans = ((p1 - p2) / p1) * 100;
-    return ans.toFixed();
-};
-  
-    return (
+return (
       <>
       <Navbar/>
         <Box className={styles.mainbox}>
@@ -56,50 +83,40 @@ const convertdecimal = (p1, p2) => {
                 </h1>
               )}
             </VStack>
-            {/* ............Product box........... */}
-            {cartproducts &&
-              cartproducts.map((el) => (
-                <VStack>
+            {cartproducts && cartproducts.map((el)=>(
+                <VStack key={el.productId}>
                   <Box className={styles.prodbox}>
                     <Box>
-                      <img src={el.productImage} alt={el.productImage} />
+                      <Image src={el.imageUrl[0]} alt={el.productImage} />
                     </Box>
                     <Box className={styles.contentdiv}>
-                      <h3>{el.productName}</h3>
-                      <h3>{el.type}</h3>
+                      <Text>{el.productName}</Text>
+                      <h3>{el.specification}</h3>
                       <h2>
-                        <span>MRP ₹{el.listPrice}</span>{" "}
-                        <span>₹{el.salePrice}*</span>{" "}
+                        <span>MRP ₹{el.market_price}</span>{" "}
+                        <span>₹{el.sale_price}*</span>{" "}
                         <span>
-                          {convertdecimal(el.listPrice, el.salePrice)}% OFF
+                          {'10'}% OFF
                         </span>
                       </h2>
-                      <p>Category :{el.category}</p>
+                      <p>Category :{el.ratings}</p>
                     </Box>
                     <Box className={styles.buttonbox}>
                       <RiDeleteBin6Line
-                        onClick={() => RemoveProduct(el.product_Id)}
+                        onClick={() => RemoveProduct(el.productId)}
                       />
-                      <Select
-                        placeholder="Qty "
-                        onChange={(e) => selectqty(e, el.product_Id)}
-                      >
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                      </Select>
-                      <p>{el.quantity}</p>
+                      <p>{50-el.quantity} Qty</p>
                     </Box>
                   </Box>
                 </VStack>
-              ))}
+             ))}
           </Box>
-  
+
           <Box className={styles.rightbox}>
             <Box className={styles.buybtnbox}>
               <VStack className={styles.cartcount}>
                 <h1>
-                  Cart Total <span> ₹{grandtotal}</span>
+                  Cart Total <span> ₹{amount.payAmount}</span>
                 </h1>
               </VStack>
               <VStack>
@@ -114,24 +131,24 @@ const convertdecimal = (p1, p2) => {
               <Box className={styles.cartprice}>
                 <p>
                   <span className={styles.subtitle}>Cart Value</span>{" "}
-                  <span>₹{grandtotal}</span>
+                  <span>₹{amount.payAmount}</span>
                 </p>
                 <p>
                   <span className={styles.subtitle}>Delivery charges</span>{" "}
-                  {grandtotal > 400 ? <span>FREE</span> : <span>₹40</span>}
+                  {amount.payAmount > 400 ? <span>FREE</span> : <span>₹40</span>}
                 </p>
   
-                {grandtotal > 400 ? (
+                {amount.payAmount > 400 ? (
                   ""
                 ) : (
-                  <p>To get free Delivery Add ₹{400 - grandtotal} </p>
+                  <p>To get free Delivery Add ₹{400 - amount.payAmount} </p>
                 )}
               </Box>
               <Divider />
   
               <h1 className={styles.amountpaid}>
                 <span className={styles.subtitle}>Amount to be paid</span>
-                <span> ₹{grandtotal}</span>
+                <span> ₹{amount.payAmount+40}</span>
               </h1>
             </Box>
           </Box>

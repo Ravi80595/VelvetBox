@@ -72,7 +72,7 @@ return (
             className="mySwiper"
           >
             {BrandsData.map((el, i) => (
-              <SwiperSlide >
+              <SwiperSlide key={i}>
                 <Box key={i} textAlign='center' width="350px" height="400px">
                   <Image borderRadius="5px" width="270px"  height= "300px" cursor= "pointer"
                     src={el.img}/>
