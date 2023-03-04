@@ -17,6 +17,7 @@ import UsersPage from './UsersPage'
 import { baseUrl } from '../../Utils/BaseUrl'
 import AllOrders from './AllOrders'
 import AllProducts from './AllProducts'
+import Logo from "../../images/Logo.jpg"
 // import ProductPage from './ProductPage'
 // import OrdersPage from './OrdersPage'
 // import AllAdminPage from './AllAdminPage'
@@ -90,7 +91,7 @@ const Dashboard = () => {
   return (
     <Flex w='100%'>
       <Box id='lhsBox' w={["5%","10%","16%"]} h='100vh' p={["0px","0px",'20px']}>
-      <Text textAlign={"center"} mb={10} >Velvet Box</Text> 
+      <Image w='90%' textAlign='center' h={100} mb={10} src={Logo} />
         <Box id='linkBox'>
           <Flex id='usersBox' p='7px 17px' className='linkItem' onClick={()=>setShow("Users")}>
           <FaUserAlt/>
@@ -103,7 +104,7 @@ const Dashboard = () => {
           </Flex>
           <Flex id='usersBox' p='7px 17px' className='linkItem' onClick={()=>setShow(2)}>
           <FaRupeeSign/>  
-          <Text pl={["0px","5px",'15px']} className="lhsName">Orders</Text>
+          <Text pl={["0px","5px",'15px']} className="lhsName">Teams</Text>
           </Flex>
           <Flex id='usersBox' p='7px 17px' className='linkItem' onClick={()=>setShow('Discounts')}>
           <CiDiscount1/>
