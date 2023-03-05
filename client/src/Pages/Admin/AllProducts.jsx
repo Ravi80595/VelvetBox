@@ -10,6 +10,7 @@ import {baseUrl} from '../../Utils/BaseUrl'
 
 const AllProducts = () => {
     const [products,setProducts] = useState([])
+    const [productss,setProductss] = useState([])
     const [productName,setProductName]= useState("")
     const [salePrice,setSalePrice]= useState('')
     const [listPrice,setListPrice] = useState("")
@@ -40,8 +41,23 @@ const getData=()=>{
   })
 }
 
+
+const getGold=()=>{
+  axios.get(`${baseUrl}/search/category?categoryName=gold`,{
+    headers:{
+      Authorization:`Bearer ${r}`
+    }
+  })
+  .then((res)=>{
+    console.log(res)
+    setLoading(false)
+    setProductss(res.data)
+  })
+}
+
   useEffect(()=>{
     getData()
+    getGold()
   },[])
 
    {/* ..................  Product Delete Method Here ........................ */}
@@ -178,6 +194,31 @@ axios.post(`${baseUrl}/add-category`,{categoryName:cat},{
                     mt={50}
 />}
                 {products && products.map((ele)=>{
+                  return(
+                    <Tr key={ele.productId}>
+                      <Td width="60px">
+                        <Image src={ele.imageUrl[0]}/>
+                      </Td>
+                        <Td width="30%" padding="5px" className='productRow2'>
+                        <p fontSize={15} >{ele.productName}</p>
+                        </Td>
+                        <Td width="20px" paddding-right="20px"  className='productRow'>
+                        <p>₹{ele.sale_price}</p>
+                        </Td>
+                        <Td  className='productRow'>  
+                        <p fontSize={20}>{ele.quantity}pcs</p>
+                        </Td>
+                        <Td fontSize='25px'  className='productRow' _hover={{color:"red",cursor:"pointer"}}>  
+                        <DeleteIcon onClick={()=>handleDelete(ele.productId)} />
+                        </Td>
+                        <Td w='20%'>
+                          <Text>{ele.specification}</Text>
+                        </Td>
+                    </Tr>
+                  )
+                })
+                }
+                 {productss && productss.map((ele)=>{
                   return(
                     <Tr key={ele.productId}>
                       <Td width="60px">

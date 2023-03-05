@@ -64,7 +64,7 @@ axios.post(`${baseUrl}/register`,payload)
     <Box width="30%" m="auto" pt={20} pb={20}>
             <Box p={5} mt={10}  boxShadow='rgba(0, 0, 0, 0.35) 0px 5px 15px'>
                 <FormControl isRequired>
-                    <HStack>
+                    {/* <HStack> */}
                         <Box>
                         <FormLabel isRequired>First Name</FormLabel>
                         <Input type="text" name='firstName' onChange={handleChange}/>
@@ -73,7 +73,7 @@ axios.post(`${baseUrl}/register`,payload)
                         <FormLabel>Last Name</FormLabel>
                         <Input type="text" name='lastName' onChange={handleChange}/>
                         </Box>
-                    </HStack>
+                    {/* </HStack> */}
                     <FormLabel>Username</FormLabel>
                         <Input type="text" name='username' onChange={handleChange}/>
                         <FormLabel>Email</FormLabel>

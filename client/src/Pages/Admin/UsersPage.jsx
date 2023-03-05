@@ -69,7 +69,7 @@ return (
                   <Th>User-name</Th>
                   <Th>Full Name</Th>
                   <Th>Email</Th>
-                  <Th>Mobile</Th>
+                  <Th>Role</Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -80,7 +80,7 @@ return (
                   <Td>{ele.username}</Td>
                   <Td>{ele.firstName} {ele.lastName}</Td>
                   <Td>{ele.email}</Td>
-                  <Td>{ele.mobileNumber}</Td>
+                  <Td>{ele.roles[0].name.split("_")[1]}</Td>
                 </Tr>
                 ))
               }
