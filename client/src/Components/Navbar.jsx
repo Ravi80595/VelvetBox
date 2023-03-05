@@ -10,7 +10,8 @@ const Navbar = () => {
 const {id,username}=JSON.parse(localStorage.getItem("velvetToken")) || []
 
 const handleLogout=()=>{
-  localStorage.setItem("velvetToken",null)
+  let r='undefined'
+  localStorage.setItem("velvetToken",JSON.stringify(null))
 }
 
 return (

@@ -70,7 +70,7 @@ axios.get(`${baseUrl}/searchById?productId=${id}`,{
  
 
 const addCart=(ids)=>{
-  fetch(`${baseUrl}/add-cart?productId=${ids}&quantity=2`,
+  fetch(`${baseUrl}/add-cart?productId=${ids}&quantity=${qty}`,
   {
     method:'POST',
     headers:{

@@ -7,8 +7,8 @@ const AdminPrivateRoute = ({children}) => {
     const isAuth = localStorage.getItem('AdminToken');
 
 
-if(isAuth=="" || isAuth=="undefined" || isAuth==null){
-    return <Navigate to="/user/signup"/>
+if(isAuth=="" || isAuth=="undefined" || isAuth==null || isAuth=='null'){
+    return <Navigate to="/adminlogin"/>
 }
   return children
 }

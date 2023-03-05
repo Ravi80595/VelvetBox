@@ -148,7 +148,7 @@ return (
   
               <h1 className={styles.amountpaid}>
                 <span className={styles.subtitle}>Amount to be paid</span>
-                <span> ₹{amount.payAmount+40}</span>
+                <span> ₹{amount.payAmount}</span>
               </h1>
             </Box>
           </Box>
