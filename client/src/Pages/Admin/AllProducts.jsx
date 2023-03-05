@@ -11,6 +11,7 @@ import {baseUrl} from '../../Utils/BaseUrl'
 const AllProducts = () => {
     const [products,setProducts] = useState([])
     const [productss,setProductss] = useState([])
+    const [productsss,setProductsss] = useState([])
     const [productName,setProductName]= useState("")
     const [salePrice,setSalePrice]= useState('')
     const [listPrice,setListPrice] = useState("")
@@ -55,9 +56,23 @@ const getGold=()=>{
   })
 }
 
+const getDaimond=()=>{
+  axios.get(`${baseUrl}/search/category?categoryName=daimond`,{
+    headers:{
+      Authorization:`Bearer ${r}`
+    }
+  })
+  .then((res)=>{
+    console.log(res)
+    setLoading(false)
+    setProductsss(res.data)
+  })
+}
+
   useEffect(()=>{
     getData()
     getGold()
+    getDaimond()
   },[])
 
    {/* ..................  Product Delete Method Here ........................ */}
@@ -69,7 +84,7 @@ const handleDelete=(prodid)=>{
     }
   })
   .then((res)=>{
-    alert(res.data.msg)
+    alert("Product Deleted")
     getData()
   })
 }
@@ -219,6 +234,31 @@ axios.post(`${baseUrl}/add-category`,{categoryName:cat},{
                 })
                 }
                  {productss && productss.map((ele)=>{
+                  return(
+                    <Tr key={ele.productId}>
+                      <Td width="60px">
+                        <Image src={ele.imageUrl[0]}/>
+                      </Td>
+                        <Td width="30%" padding="5px" className='productRow2'>
+                        <p fontSize={15} >{ele.productName}</p>
+                        </Td>
+                        <Td width="20px" paddding-right="20px"  className='productRow'>
+                        <p>₹{ele.sale_price}</p>
+                        </Td>
+                        <Td  className='productRow'>  
+                        <p fontSize={20}>{ele.quantity}pcs</p>
+                        </Td>
+                        <Td fontSize='25px'  className='productRow' _hover={{color:"red",cursor:"pointer"}}>  
+                        <DeleteIcon onClick={()=>handleDelete(ele.productId)} />
+                        </Td>
+                        <Td w='20%'>
+                          <Text>{ele.specification}</Text>
+                        </Td>
+                    </Tr>
+                  )
+                })
+                }
+                {productsss && productsss.map((ele)=>{
                   return(
                     <Tr key={ele.productId}>
                       <Td width="60px">
